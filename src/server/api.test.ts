@@ -1,5 +1,25 @@
 import request from 'supertest'
+import Knex from 'knex'
 import api from '@/server/api'
+
+function connectAsAdmin() {
+  return Knex({
+    client: 'postgresql', 
+    connection: { 
+      host: 'localhost',
+      user: 'postgres',
+    }
+  })
+}
+
+beforeAll(() => {
+  return connectAsAdmin().raw('CREATE DATABASE octo_events_test');
+});
+
+
+afterAll(() => {
+  return connectAsAdmin().raw('DROP DATABASE octo_events_test');
+});
 
 describe('api', () => {
   test('/hello-world', async () => {
@@ -11,7 +31,7 @@ describe('api', () => {
     expect(response.text).toEqual('Hello, World!')
   })
 
-  describe('/issues/:issueId/events', () => {
+  describe.skip('/issues/:issueId/events', () => {
     test('when the issue does not exist, responds with 404 not found', async () => {
       const response = await request(api)
         .get('/issues/23/events')

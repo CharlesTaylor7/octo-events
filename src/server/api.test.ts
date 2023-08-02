@@ -3,7 +3,7 @@ import Knex from 'knex'
 import api from '@/server/api'
 import { createTestDatabase, dropTestDatabase } from '@/test/database'
 
-// beforeAll(createTestDatabase)
+beforeAll(createTestDatabase)
 afterAll(dropTestDatabase)
 
 describe('api', () => {

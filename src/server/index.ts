@@ -1,4 +1,3 @@
-import express from 'express'
-import app from '@/server/app'
+import api from '@/server/api'
 
-app.listen(3000)
+api.listen(3000)

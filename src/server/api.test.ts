@@ -1,13 +1,13 @@
 import request from 'supertest'
-import app from '@/server/app'
+import api from '@/server/api'
 
-describe('app', () => {
+describe('api', () => {
   test('/hello-world', async () => {
-    const response = await request(app)
+    const response = await request(api)
       .get('/hello-world')
       .expect('Content-Type', /text\/html/)
       .expect(200)
 
-    expect(response.text).toEqual("Hello, World!")
+    expect(response.text).toEqual('Hello, World!')
   })
 })

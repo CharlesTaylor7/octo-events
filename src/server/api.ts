@@ -1,14 +1,17 @@
 import express from 'express'
-//import eventsHandler from '@/server/events'
-//import webhookHandler from '@/server/webhook'
 
-const app = express()
+const api = express()
 
-app.get('/hello-world', (req, res) => {
+api.get('/hello-world', (req, res) => {
   res.send('Hello, World!')
 })
 
-// app.get('/issues/:issueId/events', eventsHandler)
-// app.post('/webhook', webhookHandler)
+api.get('/issues/:issueId/events', (req, res) => {
+  res.header("content-type", "application/json")
+  res.status(404)
+  res.send()
+})
 
-export default app
+// api.post('/webhook', webhookHandler)
+
+export default api

@@ -15,12 +15,22 @@ const database = knexConfig.test.connection.database
 
 export async function setupTestDatabase(): Promise<Knex> {
   const admin = connectAsAdmin()
-  console.log(`initializing ${database}`)
   await admin.raw('DROP DATABASE IF EXISTS ??', database)
   await admin.raw('CREATE DATABASE ??', database)
   admin.destroy()
 
-  const testDb = knex(knexConfig.test)
+  const testDb = connect()
   await testDb.migrate.latest()
   return testDb
+}
+
+type ConfigKey = keyof typeof knexConfig
+
+let connection: Knex | undefined
+export function connect(): Knex {
+  if (!connection) {
+    const env = (process.env.NODE_ENV as ConfigKey) || 'development'
+    connection = knex(knexConfig[env])
+  } 
+  return connection
 }

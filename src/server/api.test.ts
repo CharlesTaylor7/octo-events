@@ -1,16 +1,16 @@
 import request from 'supertest'
-import Knex from 'knex'
+import { Knex } from 'knex'
 import api from '@/server/api'
-import { setupTestDatabase } from '@/test/database'
+import { setupTestDatabase } from '@/database'
 
-let knex: any
+let knex: Knex
 
 beforeAll(async () => {
   knex = await setupTestDatabase()
 })
 
 afterAll(async () => {
-  knex.destroy()
+  await knex.destroy()
 })
 
 describe('api', () => {

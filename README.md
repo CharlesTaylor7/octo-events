@@ -3,7 +3,7 @@ TODO: Docker
 ## Installation (Mac Only)
 - Setup Postgres:
   - `brew install postgresql@14`
-  - `createuser postgres`
+  - `createuser -s postgres`
   - `createdb octo\_events`
 
 - Setup with Yarn:

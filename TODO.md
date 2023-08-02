@@ -13,6 +13,10 @@
 - [x] Jest test
 - [x] Github action
 - [x] Verify jest & typescript configuration before starting feature development
+- [ ] Implement events api
+- [ ] Setup Postgres service container so test suite can still run via Github actions
+- [ ] Implement webhook api
+- [ ] Migrate from knex to kysely
 
 ## Tech Stack Choices
 

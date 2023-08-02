@@ -1,8 +1,8 @@
-import Knex from 'knex'
-import knexConfig from '../knexfile'
+import knex, { Knex } from 'knex'
+import knexConfig from '@/knexfile'
 
-function connectAsAdmin() {
-  return Knex({
+function connectAsAdmin(): Knex {
+  return knex({
     client: 'postgresql',
     connection: {
       host: 'localhost',
@@ -13,14 +13,14 @@ function connectAsAdmin() {
 
 const database = knexConfig.test.connection.database
 
-export async function createTestDatabase(): Promise<void> {
-  const knex = connectAsAdmin()
-  await knex.raw('CREATE DATABASE ??', database).catch(console.error)
-  knex.destroy()
-}
+export async function setupTestDatabase(): Promise<Knex> {
+  const admin = connectAsAdmin()
+  console.log(`initializing ${database}`)
+  await admin.raw('DROP DATABASE IF EXISTS ??', database)
+  await admin.raw('CREATE DATABASE ??', database)
+  admin.destroy()
 
-export async function dropTestDatabase(): Promise<void> {
-  const knex = connectAsAdmin()
-  await knex.raw('DROP DATABASE IF EXISTS ??', database).catch(console.error)
-  knex.destroy()
+  const testDb = knex(knexConfig.test)
+  await testDb.migrate.latest()
+  return testDb
 }

@@ -10,4 +10,15 @@ describe('api', () => {
 
     expect(response.text).toEqual('Hello, World!')
   })
+
+  describe('/issues/:issueId/events', () => {
+    test.skip("when the issue does not exist, responds with 404 not found", () => {
+    })
+
+    test.skip("when the issue has no events, responds with 200 and an empty list", () => {
+    })
+
+    test.skip("when the issue has events, responds with 200 and them", () => {
+    })
+  })
 })

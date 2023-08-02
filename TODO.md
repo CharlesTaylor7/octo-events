@@ -2,6 +2,7 @@
 - [ ] /issues/:issueId/events
 - [ ] Webhook
 - [ ] README
+- [ ] Basic Auth for API (double check with Lucas)
 
 ## Niceties
 - [] 100% test coverage

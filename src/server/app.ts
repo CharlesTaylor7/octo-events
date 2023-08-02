@@ -5,7 +5,7 @@ import express from 'express'
 const app = express()
 
 app.get('/hello-world', (req, res) => {
-  res.send("Hello, World!")
+  res.send('Hello, World!')
 })
 
 // app.get('/issues/:issueId/events', eventsHandler)

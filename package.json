@@ -1,0 +1,9 @@
+{
+  "name": "octo-events",
+  "version": "0.0.0",
+  "description": "Webhook & API for Github Events",
+  "main": "index.js",
+  "author": "Charles Taylor",
+  "license": "MIT",
+  "private": false
+}

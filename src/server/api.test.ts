@@ -1,25 +1,10 @@
 import request from 'supertest'
 import Knex from 'knex'
 import api from '@/server/api'
+import { createTestDatabase, dropTestDatabase } from '@/test/database'
 
-function connectAsAdmin() {
-  return Knex({
-    client: 'postgresql', 
-    connection: { 
-      host: 'localhost',
-      user: 'postgres',
-    }
-  })
-}
-
-beforeAll(() => {
-  return connectAsAdmin().raw('CREATE DATABASE octo_events_test');
-});
-
-
-afterAll(() => {
-  return connectAsAdmin().raw('DROP DATABASE octo_events_test');
-});
+// beforeAll(createTestDatabase)
+afterAll(dropTestDatabase)
 
 describe('api', () => {
   test('/hello-world', async () => {

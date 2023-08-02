@@ -1,0 +1,35 @@
+name: Deploy
+on:
+  push:
+    branches:
+      # - main
+      # no point in running this until deployments are in place
+      - no-deploy
+    paths:
+      - .github/**
+      - src/**
+
+jobs:
+  test:
+    name: Jest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - run: |
+          yarn
+          yarn test
+
+  typecheck:
+    name: Typescript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - run: |
+          yarn
+          yarn typecheck

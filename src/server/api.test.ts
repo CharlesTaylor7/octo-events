@@ -12,14 +12,14 @@ describe('api', () => {
   })
 
   describe('/issues/:issueId/events', () => {
-    test("when the issue does not exist, responds with 404 not found", async () => {
+    test('when the issue does not exist, responds with 404 not found', async () => {
       const response = await request(api)
         .get('/issues/23/events')
         .expect('Content-Type', /application\/json/)
         .expect(404)
     })
 
-    test.skip("when the issue has no events, responds with 200 and an empty list", async () => {
+    test.skip('when the issue has no events, responds with 200 and an empty list', async () => {
       const response = await request(api)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)
@@ -27,7 +27,6 @@ describe('api', () => {
       expect(response.body).toEqual([])
     })
 
-    test.skip("when the issue has events, responds with 200 and them", async () => {
-    })
+    test.skip('when the issue has events, responds with 200 and them', async () => {})
   })
 })

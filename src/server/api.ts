@@ -7,7 +7,7 @@ api.get('/hello-world', (req, res) => {
 })
 
 api.get('/issues/:issueId/events', (req, res) => {
-  res.header("content-type", "application/json")
+  res.header('content-type', 'application/json')
   res.status(404)
   res.send()
 })

@@ -4,9 +4,8 @@
   "description": "Webhook & API for Github Events",
   "author": "Charles Taylor",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "server": "ts-node src/server",
+    "server": "ts-node src/server/index.ts",
     "test": "jest",
     "format": "prettier --write src/",
     "typecheck": "tsc --noEmit",
@@ -25,6 +24,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   }
 }

@@ -6,7 +6,10 @@ TODO: Docker
   - `createuser postgres`
   - `createdb octo\_events`
 
-- Install Yarn
-- Install project dependencies: `yarn`
-- `yarn migrate`
-- `yarn server`
+- Setup with Yarn:
+  - Install yarn via your package manager
+  - `yarn`
+  - `yarn migrate`
+
+- Run dev server
+  - `yarn server`

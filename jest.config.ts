@@ -2,9 +2,6 @@ import { pathsToModuleNameMapper } from 'ts-jest'
 import tsconfig from './tsconfig.json'
 
 module.exports = {
-  preset: "ts-jest",
-  moduleNameMapper: pathsToModuleNameMapper(
-    tsconfig.compilerOptions.paths, 
-    { prefix: '<rootDir>/' }
-  ),
+  preset: 'ts-jest',
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
 }

@@ -7,7 +7,7 @@
   "scripts": {
     "server": "ts-node src/server/index.ts",
     "test": "jest",
-    "format": "prettier --write src/ migrations/ knexfile.js",
+    "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts",
     "migrate": "knex migrate:latest"

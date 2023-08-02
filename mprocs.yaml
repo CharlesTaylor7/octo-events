@@ -5,7 +5,7 @@ procs:
   Typescript:
     shell: yarn typecheck --watch
 
-  Dev Server :
+  Dev Server:
     shell: yarn server
 
   Test Coverage:

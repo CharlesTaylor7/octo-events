@@ -1,4 +1,4 @@
-import 'ts-node/register';
+import 'ts-node/register'
 
 export default {
   development: {
@@ -26,6 +26,9 @@ export default {
     },
     migrations: {
       tableName: 'test_migrations',
+    },
+    seeds: {
+      directory: './seeds/test',
     },
   },
 

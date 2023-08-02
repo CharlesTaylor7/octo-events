@@ -1,4 +1,4 @@
-import type {Knex} from 'knex'
+import type { Knex } from 'knex'
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }

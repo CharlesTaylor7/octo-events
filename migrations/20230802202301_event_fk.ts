@@ -1,19 +1,13 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function(knex) {
+import type {Knex} from 'knex'
+
+export function up(knex: Knex) {
   return knex.schema
     .alterTable('events', function (table) {
       table.integer('issue_id').references('issues.id')
     })
 };
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function(knex) {
+export function down(knex: Knex) {
   return knex.schema
     .alterTable('events', function (table) {
       table.dropColumn('issue_id')

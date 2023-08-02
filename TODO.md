@@ -1,19 +1,17 @@
 ## Requirements
-- API
-- Webhook
-- Tests
-- README
+- [ ] /issues/:issueId/events
+- [ ] Webhook
+- [ ] README
 
 ## Niceties
-- Github actions for tests & formatting
-- 100% test coverage
-- Deploy to fly.io/AWS etc.
+- [] 100% test coverage
+- [] Deploy to fly.io/AWS etc.
 
 ## Shortlist
-- Express hello world 
-- Jest test
-- Github action
-- Verify jest & typescript configuration before starting feature development
+- [x] Express hello world 
+- [x] Jest test
+- [x] Github action
+- [x] Verify jest & typescript configuration before starting feature development
 
 ## Tech Stack Choices
 

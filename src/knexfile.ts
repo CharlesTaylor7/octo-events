@@ -1,4 +1,4 @@
-import 'ts-node/register'
+// import 'ts-node/register'
 
 export default {
   development: {

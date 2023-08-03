@@ -38,14 +38,14 @@ api.post('/webhook', async (req, res) => {
       res.status(401).send('Unauthorized')
       return
     }
-
-    if (req.headers['X-GitHub-Event'] === 'ping') {
+    const eventType = req.get('X-GitHub-Event')
+    if (eventType === 'ping') {
       // respond to pings
       res.status(200).send('pong')
       return
     }
 
-    if (req.headers['X-GitHub-Event'] !== 'issues') {
+    if (eventType !== 'issues') {
       // acknowledge non issue events, but do nothing with them
       res.status(200).send()
       return

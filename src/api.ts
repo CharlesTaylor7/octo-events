@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import express from 'express'
 import { connect } from '@/database'
 import config from '@/config'
+import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()
 api.use(express.json())
@@ -30,18 +31,6 @@ api.get('/issues/:issueId/events', async (req, res) => {
     res.send("Sorry we're experiencing technical difficulties right now")
   }
 })
-
-function webhookRequestIsValid(req: any): boolean {
-  const requestSignature = req.headers['x-hub-signature-256']
-  if (!requestSignature) return false
-
-  const signature = crypto
-    .createHmac('sha256', config.githubWebhookSecret)
-    .update(JSON.stringify(req.body))
-    .digest('hex')
-
-  return `sha256=${signature}` === requestSignature
-}
 
 api.post('/webhook', async (req, res) => {
   try {

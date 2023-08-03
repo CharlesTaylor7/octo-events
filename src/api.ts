@@ -52,7 +52,7 @@ api.post('/webhook', async (req, res) => {
     }
 
     const knex = connect()
-    await knex('issues').insert({ id: req.body.issue.id }).onConflict("id").ignore()
+    await knex('issues').insert({ id: req.body.issue.id }).onConflict('id').ignore()
     await knex('events').insert({ issue_id: req.body.issue.id, action: req.body.action })
 
     res.status(201)

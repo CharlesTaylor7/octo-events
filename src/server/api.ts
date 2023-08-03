@@ -17,7 +17,6 @@ api.get('/issues/:issueId/events', async (req, res) => {
   if (rows[0]) {
     res.status(200)
     const rows = await knex('events').select('action', 'created_at').where('issue_id', req.params.issueId)
-    console.log(rows)
     res.send(rows)
   } else {
     res.status(404)

@@ -7,7 +7,7 @@
   "scripts": {
     "setup-pg": "createuser -s postgres",
     "server": "ts-node src/server/index.ts",
-    "test": "jest --runInBand",
+    "test": "jest",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts",

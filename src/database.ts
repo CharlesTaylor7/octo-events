@@ -31,6 +31,6 @@ export function connect(): Knex {
   if (!connection) {
     const env = (process.env.NODE_ENV as ConfigKey) || 'development'
     connection = knex(knexConfig[env])
-  } 
+  }
   return connection
 }

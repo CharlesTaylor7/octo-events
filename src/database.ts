@@ -20,7 +20,7 @@ export async function setupTestDatabase(): Promise<Knex> {
   admin.destroy()
 
   const testDb = connect()
-  await testDb.migrate.latest()
+  await testDb.migrate.latest({ directory: 'src/migrations' })
   return testDb
 }
 

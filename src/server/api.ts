@@ -1,7 +1,6 @@
 import express from 'express'
 import { connect } from '@/database'
 
-const knex = connect()
 const api = express()
 api.use(express.json())
 
@@ -10,8 +9,8 @@ api.get('/hello-world', (req, res) => {
 })
 
 api.get('/issues/:issueId/events', async (req, res) => {
+  const knex = connect()
   res.header('content-type', 'application/json')
-  console.log(req.params.issueId)
 
   const rows = await knex('issues').where('id', req.params.issueId).limit(1)
   if (rows[0]) {

@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Issue {
+  id     Int     @id
+  events Event[]
+
+  @@map("issues")
+}
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  action     String   @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  issue_id   Int
+  issue      Issue    @relation(fields: [issue_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("events")
+}

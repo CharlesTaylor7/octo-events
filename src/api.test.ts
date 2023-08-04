@@ -1,22 +1,19 @@
 import request from 'supertest'
-import { Knex } from 'knex'
+import type { PrismaClient } from '@prisma/client'
+
 import api from '@/api'
-import { setupTestDatabase } from '@/database'
+import { connect } from '@/database'
 import { signRequest } from '@/encryption'
 
-let knex: Knex
-
-beforeAll(async () => {
-  knex = await setupTestDatabase()
-})
+let prisma: PrismaClient = connect()
 
 afterAll(async () => {
-  await knex.destroy()
+  await prisma.$disconnect()
 })
 
 afterEach(async () => {
-  await knex.raw('DELETE FROM events')
-  await knex.raw('DELETE FROM issues')
+  await prisma.$executeRaw`DELETE FROM events`
+  await prisma.$executeRaw`DELETE FROM issues`
 })
 
 describe('api', () => {
@@ -46,7 +43,8 @@ describe('api', () => {
         .set(signRequest(body, { 'X-GitHub-Event': 'issues' }))
         .expect(201)
 
-      const rows = await knex('events').select('action', 'created_at')
+      const rows = await prisma.event.findMany({ select: {action: true, created_at: true}})
+      
       expect(rows).toEqual([{
         action: 'opened',
         created_at: expect.any(Date),
@@ -81,12 +79,13 @@ describe('api', () => {
     })
 
     test('when the issue has events, responds with 200 and them', async () => {
-      await knex.batchInsert('issues', [{ id: 34 }, { id: 42 }, { id: 57 }])
-      await knex.batchInsert('events', [
+      await prisma.issue.createMany({data:[{ id: 34 }, { id: 42 }, { id: 57 }]})
+      await prisma.event.createMany({
+        data: [
         { issue_id: 34, action: 'created' },
         { issue_id: 34, action: 'deleted' },
         { issue_id: 57, action: 'commented' },
-      ])
+      ]})
 
       const response = await request(api)
         .get('/issues/34/events')
@@ -100,7 +99,7 @@ describe('api', () => {
         ])
     })
     test('when the issue has no events, responds with 200 and an empty list', async () => {
-      await knex.batchInsert('issues', [{ id: 34 }, { id: 42 }, { id: 57 }])
+      await prisma.issue.createMany({data: [{ id: 34 }, { id: 42 }, { id: 57 }]})
       const response = await request(api)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)

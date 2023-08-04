@@ -1,7 +1,5 @@
-import crypto from 'crypto'
 import express from 'express'
 import { connect } from '@/database'
-import config from '@/config'
 import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()
@@ -13,22 +11,21 @@ api.get('/hello-world', (req, res) => {
 
 api.get('/issues/:issueId/events', async (req, res) => {
   try {
-    const knex = connect()
+    const prisma = connect()
     res.header('content-type', 'application/json')
 
-    const rows = await knex('issues').where('id', req.params.issueId).limit(1)
-    if (rows[0]) {
-      res.status(200)
-      const rows = await knex('events').select('action', 'created_at').where('issue_id', req.params.issueId)
-      res.send(rows)
+    const issue = await prisma.issue.findUnique({
+      where: { id: Number(req.params.issueId) },
+      include: { events: { select: { action: true, created_at: true } } },
+    })
+    if (issue) {
+      res.status(200).send(issue.events)
     } else {
-      res.status(404)
-      res.send({})
+      res.status(404).send()
     }
   } catch (e) {
     console.log(e)
-    res.status(500)
-    res.send("Sorry we're experiencing technical difficulties right now")
+    res.status(500).send("Sorry we're experiencing technical difficulties right now")
   }
 })
 
@@ -51,9 +48,20 @@ api.post('/webhook', async (req, res) => {
       return
     }
 
-    const knex = connect()
-    await knex('issues').insert({ id: req.body.issue.id }).onConflict('id').ignore()
-    await knex('events').insert({ issue_id: req.body.issue.id, action: req.body.action })
+    const prisma = connect()
+    const issueId = req.body.issue.id
+
+    await prisma.issue.upsert({
+      where: { id: issueId },
+      create: { id: issueId },
+      update: {},
+    })
+    await prisma.event.create({
+      data: {
+        action: req.body.action,
+        issue_id: issueId,
+      },
+    })
 
     res.status(201)
     res.send()

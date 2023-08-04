@@ -8,8 +8,10 @@ datasource db {
 }
 
 model Issue {
-  id     Int      @id
+  id     Int     @id
   events Event[]
+
+  @@map("issues")
 }
 
 model Event {
@@ -18,4 +20,6 @@ model Event {
   created_at DateTime @default(now()) @db.Timestamptz(6)
   issue_id   Int
   issue      Issue    @relation(fields: [issue_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("events")
 }

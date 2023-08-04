@@ -6,7 +6,7 @@ procs:
     shell: yarn typecheck --watch
 
   Dev Server:
-    shell: yarn server
+    shell: yarn dev
 
   Test Coverage:
     # Mac only; sorry

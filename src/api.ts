@@ -1,7 +1,5 @@
-import crypto from 'crypto'
 import express from 'express'
 import { connect } from '@/database'
-import config from '@/config'
 import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()

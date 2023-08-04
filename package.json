@@ -7,7 +7,7 @@
   "scripts": {
     "setup-pg": "createuser -s postgres",
     "dev": "dotenv -e .env -- prisma migrate deploy && ts-node src/index.ts",
-    "pretest": "yarn migrate:test",
+    "pretest": "yarn migrate:test && yarn prisma generate",
     "test": "dotenv -e test.env -- jest",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",

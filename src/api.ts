@@ -12,13 +12,14 @@ api.get('/hello-world', (req, res) => {
 api.get('/issues/:issueId/events', async (req, res) => {
   try {
     const prisma = connect()
-    const knex = connect2Knex()
     res.header('content-type', 'application/json')
 
-    const rows = await knex('issues').where('id', req.params.issueId).limit(1)
-    if (rows[0]) {
-      const rows = await knex('events').select('action', 'created_at').where('issue_id', req.params.issueId)
-      res.status(200).send(rows)
+    const issue = await prisma.issue.findUnique({
+      where: { id: Number(req.params.issueId) },
+      include: { events: { select: { action: true, created_at: true } } },
+    })
+    if (issue) {
+      res.status(200).send(issue.events)
     } else {
       res.status(404).send()
     }

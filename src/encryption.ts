@@ -19,7 +19,10 @@ export function signRequest(body: object, headers: Headers) {
 type Headers = IncomingHttpHeaders
 
 function githubSha256Signature(body: object) {
-  const signature = crypto.createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET as string).update(JSON.stringify(body)).digest('hex')
+  const signature = crypto
+    .createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET as string)
+    .update(JSON.stringify(body))
+    .digest('hex')
 
   return `sha256=${signature}`
 }

@@ -49,7 +49,7 @@ describe('api', () => {
       const rows = await knex('events').select('action', 'created_at')
       expect(rows).toEqual([{
         action: 'opened',
-        created_at: expect.any(String),
+        created_at: expect.any(Date),
       }])
     })
 
@@ -88,13 +88,15 @@ describe('api', () => {
         { issue_id: 57, action: 'commented' },
       ])
 
-      await request(api)
+      const response = await request(api)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .expect([
-          { action: 'created', created_at: null },
-          { action: 'deleted', created_at: null },
+
+      expect(response.body)
+        .toEqual([
+          { action: 'created', created_at: expect.any(String) },
+          { action: 'deleted', created_at: expect.any(String) },
         ])
     })
     test('when the issue has no events, responds with 200 and an empty list', async () => {

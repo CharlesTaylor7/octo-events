@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM alpine:3.18.2 as base
 
 RUN apk add --update --no-cache nodejs yarn

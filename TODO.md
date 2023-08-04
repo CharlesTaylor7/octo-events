@@ -1,19 +1,14 @@
 ## Requirements
 - [x] /issues/:issueId/events
 - [x] Webhook
-- [x] README
+- [ ] README
 
 
 ## TODO
-- [x] Github action
-- [x] Verify jest & typescript configuration before starting feature development
-- [x] Implement events api
 - [ ] Setup Postgres service container so test suite can still run via Github actions
-
-## Niceties
-- [] 100% test coverage
-- [] Deploy to fly.io/AWS etc.
-- [] Reconsider use of Prisma or TypeORM
+- [ ] Dockerize
+- [ ] Deploy to fly.io/AWS etc.
+- [ ] Write README
 
 ## Tech Stack Choices
 
@@ -29,4 +24,3 @@ I performed some google searches to find an initial list of 5 ORMS with typescri
 - TypeOrm
 
 I hate all of them equally, so I'm gonna stick with just knex for now.
-

@@ -1,17 +1,21 @@
 import request from 'supertest'
 import { Knex } from 'knex'
+import { PrismaClient } from '@prisma/client'
+
 import api from '@/api'
-import { setupTestDatabase } from '@/database'
+import { connect } from '@/database'
 import { signRequest } from '@/encryption'
 
-let knex: Knex
+let knex: Knex = connect()
 
+let prisma: PrismaClient
 beforeAll(async () => {
-  knex = await setupTestDatabase()
+  prisma = new PrismaClient()
 })
 
 afterAll(async () => {
   await knex.destroy()
+  await prisma.$disconnect()
 })
 
 afterEach(async () => {
@@ -46,7 +50,9 @@ describe('api', () => {
         .set(signRequest(body, { 'X-GitHub-Event': 'issues' }))
         .expect(201)
 
-      const rows = await knex('events').select('action', 'created_at')
+      const rows = await prisma.event.findMany({ select: {action: true, created_at: true}})
+      // const rows = await knex('events').select('action', 'created_at')
+      
       expect(rows).toEqual([{
         action: 'opened',
         created_at: expect.any(Date),

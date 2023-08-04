@@ -21,8 +21,8 @@ export default {
       database: 'octo_events_test',
     },
     pool: {
-      min: 1,
-      max: 1,
+      min: 2,
+      max: 10,
     },
     migrations: {
       tableName: 'test_migrations',

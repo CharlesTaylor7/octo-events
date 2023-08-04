@@ -5,9 +5,9 @@
 
 
 ## TODO
-- [ ] Setup Postgres service container so test suite can still run via Github actions
-- [ ] Dockerize
-- [ ] Deploy to fly.io/AWS etc.
+- [x] Setup Postgres service container so test suite can still run via Github actions
+- [x] Dockerize
+- [x] Deploy to fly.io
 - [ ] Write README
 
 ## Tech Stack Choices

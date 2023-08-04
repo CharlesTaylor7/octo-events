@@ -26,7 +26,7 @@ describe('api', () => {
       const body = {
         action: 'opened',
         issue: {
-          id: 123,
+          number: 123,
         },
       }
       await request(api)

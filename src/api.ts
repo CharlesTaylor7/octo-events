@@ -45,7 +45,7 @@ api.post('/webhook', async (req, res) => {
     }
 
     const prisma = connect()
-    const issueId = req.body.issue.id
+    const issueId = req.body.issue.number
 
     await prisma.issue.upsert({
       where: { id: issueId },

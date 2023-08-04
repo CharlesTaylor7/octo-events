@@ -67,8 +67,7 @@ api.post('/webhook', async (req, res) => {
     res.send()
   } catch (e) {
     console.log(e)
-    res.status(500)
-    res.send("Sorry we're experiencing technical difficulties right now")
+    res.status(500).send("Sorry we're experiencing technical difficulties right now")
   }
 })
 

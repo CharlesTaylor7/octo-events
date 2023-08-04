@@ -1,6 +1,19 @@
-TODO: Docker
+# Octo Events
+Octo events is an API server built with Express.js & typescript. 
+It receives events pertaining to github issues, and then makes those events available to read later.
 
-## Installation 
+Consumers of the api can get a list of events that occurred on this repo by calling the endpoint `/issues/:issueNumber/events`. 
+
+
+This application is live and deployed on fly.io.
+So to see a sample query in action just visit this url: https://octo-events.fly.dev/issues/3/events
+
+## CI/CD
+This project makes use of Continuous Integration & Continuous Delivery via Github Actions.
+Every push to the `main` branch will cause the testsuite and typescript verification to run. If both those pass, then the application is deployed to fly.io. You can see the workflow `.github/workflows/publish.yml` for the nitty gritty details.
+
+
+## Local Development Setup 
 1. You need postgres installed, with a superuser named "postgres".
   Sample instructions for Mac:
     - `brew install postgresql@14`
@@ -12,11 +25,20 @@ TODO: Docker
 3. Install dependencies:
   `yarn`
 
-## Development
-
-Run the dev server with:
+## Development Commands
+Start the dev server:
 `yarn dev`
 
+Format code:
+`yarn format`
+
+Run tests:
+`yarn test`
+
+Verify typescript types:
+`yarn typecheck`
+
+I personally use [mprocs](https://github.com/pvolok/mprocs) to manage running multiple of these commands together.
 
 ## Migrations
 To migrate the database, you'll need to edit the `prisma/schema.prisma` file.

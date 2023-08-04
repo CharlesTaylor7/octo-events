@@ -52,4 +52,4 @@ Database migrations are managed via [Prisma](https://www.prisma.io/docs/concepts
 To migrate the database, you'll need to edit the `prisma/schema.prisma` file
 
 Then you can apply those changes by running `yarn migrate`. This will immediately update your local dev database, and serialize your changes as a new sql migration in the `prisma/migrations` folder.
-You need to commit the automatically generated migration.sql file alongside your changes to the schema.prism file. That way, the production database will be able to migrate properly.
+You need to commit the automatically generated `migration.sql` file alongside your changes to the schema.prism file. That way, the production database will be able to migrate properly.

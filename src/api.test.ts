@@ -1,22 +1,19 @@
 import request from 'supertest'
-import { Knex } from 'knex'
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 
 import api from '@/api'
-import { connect2Knex, connect } from '@/database'
+import { connect } from '@/database'
 import { signRequest } from '@/encryption'
 
-let knex: Knex = connect2Knex()
 let prisma: PrismaClient = connect()
 
 afterAll(async () => {
-  await knex.destroy()
   await prisma.$disconnect()
 })
 
 afterEach(async () => {
-  await knex.raw('DELETE FROM events')
-  await knex.raw('DELETE FROM issues')
+  await prisma.$executeRaw`DELETE FROM events`
+  await prisma.$executeRaw`DELETE FROM issues`
 })
 
 describe('api', () => {
@@ -82,12 +79,13 @@ describe('api', () => {
     })
 
     test('when the issue has events, responds with 200 and them', async () => {
-      await knex.batchInsert('issues', [{ id: 34 }, { id: 42 }, { id: 57 }])
-      await knex.batchInsert('events', [
+      await prisma.issue.createMany({data:[{ id: 34 }, { id: 42 }, { id: 57 }]})
+      await prisma.event.createMany({
+        data: [
         { issue_id: 34, action: 'created' },
         { issue_id: 34, action: 'deleted' },
         { issue_id: 57, action: 'commented' },
-      ])
+      ]})
 
       const response = await request(api)
         .get('/issues/34/events')
@@ -101,7 +99,7 @@ describe('api', () => {
         ])
     })
     test('when the issue has no events, responds with 200 and an empty list', async () => {
-      await knex.batchInsert('issues', [{ id: 34 }, { id: 42 }, { id: 57 }])
+      await prisma.issue.createMany({data: [{ id: 34 }, { id: 42 }, { id: 57 }]})
       const response = await request(api)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)

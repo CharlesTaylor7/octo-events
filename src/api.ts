@@ -1,5 +1,5 @@
 import express from 'express'
-import { connect2Knex, connect } from '@/database'
+import { connect } from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()
@@ -53,14 +53,14 @@ api.post('/webhook', async (req, res) => {
 
     await prisma.issue.upsert({
       where: { id: issueId },
-      create: { id: issueId, },
-      update: { }
+      create: { id: issueId },
+      update: {},
     })
     await prisma.event.create({
       data: {
         action: req.body.action,
         issue_id: issueId,
-      }
+      },
     })
 
     res.status(201)

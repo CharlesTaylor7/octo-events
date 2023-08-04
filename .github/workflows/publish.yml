@@ -2,9 +2,7 @@ name: Deploy
 on:
   push:
     branches:
-      # - main
-      # no point in running this until deployments are in place
-      - no-deploy
+      - main
     paths:
       - .github/**
       - src/**
@@ -13,6 +11,21 @@ jobs:
   test:
     name: Jest
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: octo_events_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3

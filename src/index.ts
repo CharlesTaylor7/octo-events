@@ -1,3 +1,5 @@
 import api from '@/api'
 
-api.listen(3000, () => console.log('Octo Events API running on port 3000'))
+const port = 8080 //process.env.PORT
+console.log(`port: ${port}`)
+api.listen(port, () => console.log(`Octo Events API running on port ${port}`))

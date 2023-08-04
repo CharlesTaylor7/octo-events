@@ -46,8 +46,11 @@ describe('api', () => {
         .set(signRequest(body, { 'X-GitHub-Event': 'issues' }))
         .expect(201)
 
-      const rows = await knex('events').select('action')
-      expect(rows).toEqual([{ action: 'opened'}])
+      const rows = await knex('events').select('action', 'created_at')
+      expect(rows).toEqual([{
+        action: 'opened',
+        created_at: expect.any(String),
+      }])
     })
 
     test('with valid signature, send ping', async () => {
@@ -67,8 +70,6 @@ describe('api', () => {
         .set(signRequest(body, { 'X-GitHub-Event': 'other' }))
         .expect(200)
     })
-
-
   })
 
   describe('GET /issues/:issueId/events', () => {

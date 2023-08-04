@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "setup-pg": "createuser -s postgres",
-    "server": "ts-node src/server/index.ts",
+    "server": "ts-node src/index.ts",
     "test": "jest",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",

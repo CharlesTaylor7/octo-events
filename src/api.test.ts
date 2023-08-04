@@ -17,14 +17,6 @@ afterEach(async () => {
 })
 
 describe('api', () => {
-  test('GET /hello-world', async () => {
-    await request(api)
-      .get('/hello-world')
-      .expect('Content-Type', /text\/html/)
-      .expect(200)
-      .expect('Hello, World!')
-  })
-
   describe('POST /webhook', () => {
     test('invalid signature', async () => {
       await request(api).post('/webhook').expect(401).expect('Unauthorized')

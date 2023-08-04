@@ -1,17 +1,14 @@
 ## Requirements
 - [x] /issues/:issueId/events
-- [ ] Webhook
-- [ ] README
+- [x] Webhook
+- [x] README
 
 
 ## TODO
-- [x] Express hello world 
-- [x] Jest test
 - [x] Github action
 - [x] Verify jest & typescript configuration before starting feature development
 - [x] Implement events api
 - [ ] Setup Postgres service container so test suite can still run via Github actions
-- [ ] Implement webhook api
 
 ## Niceties
 - [] 100% test coverage

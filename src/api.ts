@@ -5,10 +5,6 @@ import { webhookRequestIsValid } from '@/encryption'
 const api = express()
 api.use(express.json())
 
-api.get('/hello-world', (req, res) => {
-  res.send('Hello, World!')
-})
-
 api.get('/issues/:issueId/events', async (req, res) => {
   try {
     const prisma = connect()

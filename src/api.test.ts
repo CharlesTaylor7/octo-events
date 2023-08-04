@@ -3,15 +3,11 @@ import { Knex } from 'knex'
 import { PrismaClient } from '@prisma/client'
 
 import api from '@/api'
-import { connect } from '@/database'
+import { connect2Knex, connect } from '@/database'
 import { signRequest } from '@/encryption'
 
-let knex: Knex = connect()
-
-let prisma: PrismaClient
-beforeAll(async () => {
-  prisma = new PrismaClient()
-})
+let knex: Knex = connect2Knex()
+let prisma: PrismaClient = connect()
 
 afterAll(async () => {
   await knex.destroy()
@@ -51,7 +47,6 @@ describe('api', () => {
         .expect(201)
 
       const rows = await prisma.event.findMany({ select: {action: true, created_at: true}})
-      // const rows = await knex('events').select('action', 'created_at')
       
       expect(rows).toEqual([{
         action: 'opened',

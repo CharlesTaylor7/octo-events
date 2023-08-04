@@ -1,5 +1,5 @@
 import express from 'express'
-import { connect } from '@/database'
+import { connect2Knex, connect } from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()
@@ -11,22 +11,20 @@ api.get('/hello-world', (req, res) => {
 
 api.get('/issues/:issueId/events', async (req, res) => {
   try {
-    const knex = connect()
+    const prisma = connect()
+    const knex = connect2Knex()
     res.header('content-type', 'application/json')
 
     const rows = await knex('issues').where('id', req.params.issueId).limit(1)
     if (rows[0]) {
-      res.status(200)
       const rows = await knex('events').select('action', 'created_at').where('issue_id', req.params.issueId)
-      res.send(rows)
+      res.status(200).send(rows)
     } else {
-      res.status(404)
-      res.send({})
+      res.status(404).send()
     }
   } catch (e) {
     console.log(e)
-    res.status(500)
-    res.send("Sorry we're experiencing technical difficulties right now")
+    res.status(500).send("Sorry we're experiencing technical difficulties right now")
   }
 })
 
@@ -49,7 +47,8 @@ api.post('/webhook', async (req, res) => {
       return
     }
 
-    const knex = connect()
+    const prisma = connect()
+    const knex = connect2Knex()
     await knex('issues').insert({ id: req.body.issue.id }).onConflict('id').ignore()
     await knex('events').insert({ issue_id: req.body.issue.id, action: req.body.action })
 

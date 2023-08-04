@@ -49,9 +49,19 @@ api.post('/webhook', async (req, res) => {
     }
 
     const prisma = connect()
-    const knex = connect2Knex()
-    await knex('issues').insert({ id: req.body.issue.id }).onConflict('id').ignore()
-    await knex('events').insert({ issue_id: req.body.issue.id, action: req.body.action })
+    const issueId = req.body.issue.id
+
+    await prisma.issue.upsert({
+      where: { id: issueId },
+      create: { id: issueId, },
+      update: { }
+    })
+    await prisma.event.create({
+      data: {
+        action: req.body.action,
+        issue_id: issueId,
+      }
+    })
 
     res.status(201)
     res.send()

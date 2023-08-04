@@ -7,7 +7,7 @@ Consumers of the api can get a list of events that occurred on this repo by call
 Octo Events is live and deployed on fly.io.
 So to see a sample query in action, just visit this url: https://octo-events.fly.dev/issues/3/events
 
-## CI/CD
+## CI / CD
 This project makes use of Continuous Integration & Continuous Delivery via Github Actions.
 Every push to the `main` branch will cause the testsuite and typescript verification to run. If both those pass, then the application is deployed to fly.io. You can see the workflow `.github/workflows/publish.yml` for the nitty gritty details.
 

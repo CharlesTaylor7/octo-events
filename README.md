@@ -22,10 +22,14 @@ Currently the application is hosted on fly.io, for ease of setup. But this proje
     - `createuser -s postgres` ( There needs to be super user named postgres)
 
 2. You need to install yarn (classic):
-  `npm install --global yarn`
+```sh
+npm install --global yarn
+```
 
-3. Install dependencies:
-  `yarn`
+4. Install dependencies:
+```sh
+yarn
+```
 
 ## Development Commands
 Start the dev server:

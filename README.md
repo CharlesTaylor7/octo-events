@@ -4,7 +4,7 @@ It receives webhook events from github issues, and then makes those events avail
 
 Consumers of the api can get a list of events that occurred on this repo by calling the endpoint `/issues/:issueNumber/events`. 
 
-Octo Events is live and deployed on [fly.io](fly.io)
+Octo Events is live and deployed on [fly.io](https://fly.io)
 So to see a sample query in action, just visit this url: https://octo-events.fly.dev/issues/3/events
 
 ## CI / CD

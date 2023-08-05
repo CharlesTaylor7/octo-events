@@ -1,15 +1,9 @@
 import request from 'supertest'
-import type { PrismaClient } from '@prisma/client'
 
 import api from '@/api'
-import { connect } from '@/database'
+import prisma from '@/database'
 import { signRequest } from '@/encryption'
 
-let prisma: PrismaClient = connect()
-
-afterAll(async () => {
-  await prisma.$disconnect()
-})
 
 afterEach(async () => {
   await prisma.$executeRaw`DELETE FROM events`

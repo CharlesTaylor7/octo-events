@@ -1,5 +1,5 @@
 import express from 'express'
-import { connect } from '@/database'
+import prisma from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 
 const api = express()
@@ -7,7 +7,6 @@ api.use(express.json())
 
 api.get('/issues/:issueId/events', async (req, res) => {
   try {
-    const prisma = connect()
     res.header('content-type', 'application/json')
 
     const issue = await prisma.issue.findUnique({
@@ -44,7 +43,6 @@ api.post('/webhook', async (req, res) => {
       return
     }
 
-    const prisma = connect()
     const issueId = req.body.issue.number
 
     await prisma.issue.upsert({

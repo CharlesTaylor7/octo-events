@@ -18,10 +18,12 @@ Currently the application is hosted on fly.io, for ease of setup. But this proje
 ## Local Development Setup 
 1. You need postgres installed, with a superuser named "postgres".
   Sample instructions for Mac:
-    - `brew install postgresql@14`
-    - `createuser -s postgres` ( There needs to be super user named postgres)
+    ```sh
+    brew install postgresql@14`
+    createuser -s postgres
+    ```
 
-2. You need to install yarn (classic):
+3. You need to install yarn (classic):
 ```sh
 npm install --global yarn
 ```

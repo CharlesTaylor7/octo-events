@@ -31,6 +31,20 @@ npm install --global yarn
 yarn
 ```
 
+4. Setup your `.env` file:
+`.env` is in the .gitignore file and should stay that way. To make your .env file, copy the contents of `.env.dev-sample` over to `.env` and fill in the values.
+`
+- `DATABASE_URL`: This one can stay as-is.
+- `GITHUB_WEBHOOK_SECRET`: Set this value to a secure random string. I generarated mine by running `npx uuid`. 
+
+5. Setup your webhook:
+Pick a github repo to watch and create a webhook for it. The Github docs outline the process well. When you are prompted for a secure secret, use the same value generated for `GITHUB_WEBHOOK_SECRET`.
+For the payload url, you'll probably want to use ngrok and provide the url that tool gives you. 
+
+- Github Webhooks: https://developer.github.com/webhooks/creating/.
+- Ngrok: https://ngrok.com/
+
+
 ## Development Commands
 Start the dev server:
 `yarn dev`

@@ -19,7 +19,7 @@ Currently the application is hosted on fly.io, for ease of setup. But this proje
 1. You need postgres installed, with a superuser named "postgres".
   Sample instructions for Mac:
     ```sh
-    brew install postgresql@14`
+    brew install postgresql@14
     createuser -s postgres
     ```
 

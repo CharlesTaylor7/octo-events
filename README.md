@@ -36,7 +36,8 @@ yarn
 
 `.env` is in the .gitignore file and should stay that way. To make your .env file, copy the contents of `.env.dev-sample` over to `.env` and fill in the values.
 `
-- `DATABASE_URL`: This one can stay as-is.
+- `PORT`: Fill in whichever port you'd like to run your dev server from.
+- `DATABASE_URL`: The database connection string. Can stay as-is.
 - `GITHUB_WEBHOOK_SECRET`: Set this value to a secure random string. I generarated mine by running `npx uuid`. 
 
 5. Setup your webhook:

@@ -16,14 +16,13 @@ There is a provided Dockerfile intended for production deployment, but not local
 Currently the application is hosted on fly.io, for ease of setup. But this project could be deployed to other cloud providers with relative ease, because it is already running in a docker container.
 
 ## Local Development Setup 
-1. You need postgres installed, with a superuser named "postgres".
-  Sample instructions for Mac:
-    ```sh
-    brew install postgresql@14
-    createuser -s postgres
-    ```
+1. You need postgres installed, with a superuser named "postgres". Sample instructions for Mac:
+```sh
+brew install postgresql@14
+createuser -s postgres
+```
 
-3. You need to install yarn (classic):
+4. You need to install yarn (classic):
 ```sh
 npm install --global yarn
 ```

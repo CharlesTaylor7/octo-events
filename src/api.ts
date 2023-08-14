@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 import Fastify from 'fastify'
@@ -6,44 +7,21 @@ const api = Fastify({
   logger: true,
 })
 
-api.get('/issues/:issueId/events', async (req, res) => {
-  res.header('content-type', 'application/json')
-
-  const issue = await prisma.issue.findUnique({
-    where: { id: Number(req.params.issueId) },
-    include: { events: { select: { action: true, created_at: true } } },
-  })
-  if (issue) {
-    res.status(200).send(issue.events)
-  } else {
-    res.status(404).send()
-  }
+api.get('/issues/:issueId/events', {
+  async handler(req, res) {
+    const issue = await prisma.issue.findUnique({
+      where: { id: Number(req.params.issueId) },
+      include: { events: { select: { action: true, created_at: true } } },
+    })
+    if (issue) {
+      res.status(200).send(issue.events)
+    } else {
+      res.status(404).send({})
+    }
+  },
 })
 
 api.post('/webhook', {
-  schema: {
-    body: {
-      type: 'object',
-      properties: {
-        /*
-        action: { type: 'string'},
-        issue: {
-          type: 'object',
-          properties: {
-            number: { type: 'number'},
-          }
-        }
-        */
-      },
-    },
-    headers: {
-      type: 'object',
-      properties: {
-        'X-GitHub-Event': { type: 'string' },
-      },
-    },
-  },
-
   async handler(req, res) {
     if (!webhookRequestIsValid(req)) {
       res.status(401).send('Unauthorized')

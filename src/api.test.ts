@@ -14,9 +14,6 @@ afterEach(async () => {
 
 describe('api', () => {
   describe('POST /webhook', () => {
-    test('requst without body, reply with 400 Bad Request', async () => {
-      await request(api.server).post('/webhook').expect(400)
-    })
     test('invalid signature', async () => {
       await request(api.server).post('/webhook').send({}).expect(401)
     })

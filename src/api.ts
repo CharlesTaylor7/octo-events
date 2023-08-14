@@ -1,36 +1,55 @@
-import express from 'express'
 import prisma from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
+import Fastify from 'fastify'
 
-const api = express()
-api.use(express.json())
+const api = Fastify({
+  logger: true,
+})
 
 api.get('/issues/:issueId/events', async (req, res) => {
-  try {
-    res.header('content-type', 'application/json')
+  res.header('content-type', 'application/json')
 
-    const issue = await prisma.issue.findUnique({
-      where: { id: Number(req.params.issueId) },
-      include: { events: { select: { action: true, created_at: true } } },
-    })
-    if (issue) {
-      res.status(200).send(issue.events)
-    } else {
-      res.status(404).send()
-    }
-  } catch (e) {
-    console.log(e)
-    res.status(500).send("Sorry we're experiencing technical difficulties right now")
+  const issue = await prisma.issue.findUnique({
+    where: { id: Number(req.params.issueId) },
+    include: { events: { select: { action: true, created_at: true } } },
+  })
+  if (issue) {
+    res.status(200).send(issue.events)
+  } else {
+    res.status(404).send()
   }
 })
 
-api.post('/webhook', async (req, res) => {
-  try {
+api.post('/webhook', {
+  schema: {
+    body: {
+      type: 'object',
+      properties: {
+        /*
+        action: { type: 'string'},
+        issue: {
+          type: 'object',
+          properties: {
+            number: { type: 'number'},
+          }
+        }
+        */
+      },
+    },
+    headers: {
+      type: 'object',
+      properties: {
+        'X-GitHub-Event': { type: 'string' },
+      },
+    },
+  },
+
+  async handler(req, res) {
     if (!webhookRequestIsValid(req)) {
       res.status(401).send('Unauthorized')
       return
     }
-    const eventType = req.get('X-GitHub-Event')
+    const eventType = req.headers['x-github-event']
     if (eventType === 'ping') {
       // respond to pings
       res.status(200).send('pong')
@@ -57,12 +76,8 @@ api.post('/webhook', async (req, res) => {
       },
     })
 
-    res.status(201)
-    res.send()
-  } catch (e) {
-    console.log(e)
-    res.status(500).send("Sorry we're experiencing technical difficulties right now")
-  }
+    res.status(201).send()
+  },
 })
 
 export default api

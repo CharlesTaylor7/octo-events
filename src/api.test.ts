@@ -4,6 +4,8 @@ import api from '@/api'
 import prisma from '@/database'
 import { signRequest } from '@/encryption'
 
+beforeAll(() => api.ready());
+afterAll(() => api.close());
 
 afterEach(async () => {
   await prisma.$executeRaw`DELETE FROM events`
@@ -12,8 +14,11 @@ afterEach(async () => {
 
 describe('api', () => {
   describe('POST /webhook', () => {
+    test('requst without body, reply with 400 Bad Request', async () => {
+      await request(api.server).post('/webhook').expect(400)
+    })
     test('invalid signature', async () => {
-      await request(api).post('/webhook').expect(401).expect('Unauthorized')
+      await request(api.server).post('/webhook').send({}).expect(401)
     })
 
     test('with valid signature, send issue event', async () => {
@@ -23,7 +28,7 @@ describe('api', () => {
           number: 123,
         },
       }
-      await request(api)
+      await request(api.server)
         .post('/webhook')
         .send(body)
         .set(signRequest(body, { 'X-GitHub-Event': 'issues' }))
@@ -39,7 +44,7 @@ describe('api', () => {
 
     test('with valid signature, send ping', async () => {
       const body = {}
-      await request(api)
+      await request(api.server)
         .post('/webhook')
         .send(body)
         .set(signRequest(body, { 'X-GitHub-Event': 'ping' }))
@@ -48,7 +53,7 @@ describe('api', () => {
 
     test('with valid signature, send non-issue event', async () => {
       const body = {}
-      await request(api)
+      await request(api.server)
         .post('/webhook')
         .send(body)
         .set(signRequest(body, { 'X-GitHub-Event': 'other' }))
@@ -58,7 +63,7 @@ describe('api', () => {
 
   describe('GET /issues/:issueId/events', () => {
     test('when the issue does not exist, responds with 404 not found', async () => {
-      await request(api)
+      await request(api.server)
         .get('/issues/23/events')
         .expect('Content-Type', /application\/json/)
         .expect(404)
@@ -73,7 +78,7 @@ describe('api', () => {
         { issue_id: 57, action: 'commented' },
       ]})
 
-      const response = await request(api)
+      const response = await request(api.server)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)
         .expect(200)
@@ -86,7 +91,7 @@ describe('api', () => {
     })
     test('when the issue has no events, responds with 200 and an empty list', async () => {
       await prisma.issue.createMany({data: [{ id: 34 }, { id: 42 }, { id: 57 }]})
-      const response = await request(api)
+      const response = await request(api.server)
         .get('/issues/34/events')
         .expect('Content-Type', /application\/json/)
         .expect(200)

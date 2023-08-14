@@ -1,9 +1,15 @@
 import type { IncomingHttpHeaders } from 'node:http'
-import type { Request } from 'express'
 import crypto from 'crypto'
 
+type Request = {
+  headers: Record<string, string>
+  body: object
+  //get(header: string): string | undefined
+}
+
 export function webhookRequestIsValid(req: Request): boolean {
-  const requestSignature = req.get('X-Hub-Signature-256')
+  const requestSignature = req.headers['x-hub-signature-256']
+  console.log(requestSignature, req.headers)
   if (!requestSignature) return false
 
   const signature = githubSha256Signature(req.body)
@@ -12,7 +18,7 @@ export function webhookRequestIsValid(req: Request): boolean {
 
 // testing purposes
 export function signRequest(body: object, headers: Headers) {
-  headers['X-Hub-Signature-256'] = githubSha256Signature(body)
+  headers['x-hub-signature-256'] = githubSha256Signature(body)
   return headers
 }
 

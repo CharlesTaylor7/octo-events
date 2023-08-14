@@ -1,5 +1,5 @@
 # Octo Events
-Octo events is an API server built with [Express](https://expressjs.com/), [Typescript](https://www.typescriptlang.org/) & [Prisma](https://www.prisma.io/). 
+Octo events is an API server built with [Fastify](https://fastify.dev/), [Typescript](https://www.typescriptlang.org/) & [Prisma](https://www.prisma.io/).
 It receives webhook events from github issues, and then makes those events available to read later.
 
 Consumers of the api can get a list of events that occurred on this repo by calling the endpoint `/issues/:issueNumber/events`. 

@@ -1,4 +1,11 @@
 import api from '@/api'
 
-const port = process.env.PORT
-api.listen(port, () => console.log(`Octo Events API running on port ${port}`))
+const port: number = Number(process.env.PORT)
+
+api.listen({ port }, function (error, address) {
+  if (error) {
+    api.log.error(error)
+    return
+  }
+  console.log(`Octo Events API running at ${address}`)
+})

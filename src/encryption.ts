@@ -2,14 +2,12 @@ import type { IncomingHttpHeaders } from 'node:http'
 import crypto from 'crypto'
 
 type Request = {
-  headers: Record<string, string>
-  body: object
-  //get(header: string): string | undefined
+  headers: Headers,
+  body: unknown,
 }
 
 export function webhookRequestIsValid(req: Request): boolean {
   const requestSignature = req.headers['x-hub-signature-256']
-  console.log(requestSignature, req.headers)
   if (!requestSignature) return false
 
   const signature = githubSha256Signature(req.body)
@@ -24,7 +22,7 @@ export function signRequest(body: object, headers: Headers) {
 
 type Headers = IncomingHttpHeaders
 
-function githubSha256Signature(body: object) {
+function githubSha256Signature(body: unknown) {
   const signature = crypto
     .createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET as string)
     .update(JSON.stringify(body))

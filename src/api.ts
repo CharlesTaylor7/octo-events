@@ -1,16 +1,18 @@
-// @ts-nocheck
 import prisma from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 import Fastify from 'fastify'
+import { Type, Static } from '@sinclair/typebox'
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+
 
 const api = Fastify({
   logger: true,
-})
+}).withTypeProvider<TypeBoxTypeProvider>()
 
 api.get('/issues/:issueId/events', {
   async handler(req, res) {
     const issue = await prisma.issue.findUnique({
-      where: { id: Number(req.params.issueId) },
+      where: { id: Number((req.params as any).issueId) },
       include: { events: { select: { action: true, created_at: true } } },
     })
     if (issue) {
@@ -21,7 +23,19 @@ api.get('/issues/:issueId/events', {
   },
 })
 
+const bodySchema = Type.Object({
+  action: Type.String(),
+  issue: Type.Object({
+    number: Type.Number({}),
+  })
+})
+
+type Body = Static<typeof bodySchema>;
+
 api.post('/webhook', {
+  schema: {
+    body: bodySchema
+  },
   async handler(req, res) {
     if (!webhookRequestIsValid(req)) {
       res.status(401).send('Unauthorized')
@@ -39,8 +53,8 @@ api.post('/webhook', {
       res.status(200).send()
       return
     }
-
-    const issueId = req.body.issue.number
+    const body = req.body 
+    const issueId = body.issue.number
 
     await prisma.issue.upsert({
       where: { id: issueId },
@@ -49,7 +63,7 @@ api.post('/webhook', {
     })
     await prisma.event.create({
       data: {
-        action: req.body.action,
+        action: body.action,
         issue_id: issueId,
       },
     })

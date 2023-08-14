@@ -64,17 +64,19 @@ api.post('/webhook', {
     const body = req.body
     const issueId = body.issue.number
 
-    await prisma.issue.upsert({
-      where: { id: issueId },
-      create: { id: issueId },
-      update: {},
-    })
-    await prisma.event.create({
-      data: {
-        action: body.action,
-        issue_id: issueId,
-      },
-    })
+    await prisma.$transaction([
+      prisma.issue.upsert({
+        where: { id: issueId },
+        create: { id: issueId },
+        update: {},
+      }),
+      prisma.event.create({
+        data: {
+          action: body.action,
+          issue_id: issueId,
+        },
+      }),
+    ])
 
     res.status(201).send()
   },

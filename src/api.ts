@@ -1,7 +1,7 @@
 import prisma from '@/database'
 import { webhookRequestIsValid } from '@/encryption'
 import Fastify from 'fastify'
-import { Type, Static } from '@sinclair/typebox'
+import { Type } from '@sinclair/typebox'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
 const api = Fastify({
@@ -9,9 +9,14 @@ const api = Fastify({
 }).withTypeProvider<TypeBoxTypeProvider>()
 
 api.get('/issues/:issueId/events', {
+  schema: {
+    params: Type.Object({
+      issueId: Type.Number(),
+    }),
+  },
   async handler(req, res) {
     const issue = await prisma.issue.findUnique({
-      where: { id: Number((req.params as any).issueId) },
+      where: { id: req.params.issueId },
       include: { events: { select: { action: true, created_at: true } } },
     })
     if (issue) {
@@ -22,19 +27,15 @@ api.get('/issues/:issueId/events', {
   },
 })
 
-const bodySchema = Type.Object({
-  action: Type.String(),
-  issue: Type.Object({
-    number: Type.Number({}),
-  }),
-})
-
-type Body = Static<typeof bodySchema>
-
 api.post('/webhook', {
   attachValidation: true,
   schema: {
-    body: bodySchema,
+    body: Type.Object({
+      action: Type.String(),
+      issue: Type.Object({
+        number: Type.Number({}),
+      }),
+    }),
   },
   async handler(req, res) {
     if (!webhookRequestIsValid(req)) {

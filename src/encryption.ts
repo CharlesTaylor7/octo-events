@@ -2,8 +2,8 @@ import type { IncomingHttpHeaders } from 'node:http'
 import crypto from 'crypto'
 
 type Request = {
-  headers: Headers,
-  body: unknown,
+  headers: Headers
+  body: unknown
 }
 
 export function webhookRequestIsValid(req: Request): boolean {

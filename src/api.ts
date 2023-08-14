@@ -4,7 +4,6 @@ import Fastify from 'fastify'
 import { Type, Static } from '@sinclair/typebox'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
-
 const api = Fastify({
   logger: true,
 }).withTypeProvider<TypeBoxTypeProvider>()
@@ -27,20 +26,22 @@ const bodySchema = Type.Object({
   action: Type.String(),
   issue: Type.Object({
     number: Type.Number({}),
-  })
+  }),
 })
 
-type Body = Static<typeof bodySchema>;
+type Body = Static<typeof bodySchema>
 
 api.post('/webhook', {
+  attachValidation: true,
   schema: {
-    body: bodySchema
+    body: bodySchema,
   },
   async handler(req, res) {
     if (!webhookRequestIsValid(req)) {
       res.status(401).send('Unauthorized')
       return
     }
+
     const eventType = req.headers['x-github-event']
     if (eventType === 'ping') {
       // respond to pings
@@ -53,7 +54,13 @@ api.post('/webhook', {
       res.status(200).send()
       return
     }
-    const body = req.body 
+
+    if (req.validationError) {
+      res.status(400).send()
+      return
+    }
+
+    const body = req.body
     const issueId = body.issue.number
 
     await prisma.issue.upsert({
